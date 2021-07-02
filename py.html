@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Deployment Tutorial 1</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+</head>
+
+<body style="background: #000;">
+ <div class="login">
+	<h1>Sales Forecasting</h1>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	 <input id="textInput1"  type="text" name="Avg. Area Income" placeholder="Avg. Area Income" required="required" /> <br>
+          <input id="textInput2" type="text" name="Avg. Area House Age" placeholder="Avg. Area House Age" required="required" /> <br>
+          <input id="textInput3" type="text" name="Avg. Area Number of Rooms" placeholder="Avg. Area Number of Rooms" required="required" /> <br>
+          <input id="textInput4" type="text" name="Area Population" placeholder="Area Population" required="required" /> <br>
+          <input id="textInput5" type="text" name="Avg. Area Number of Bedrooms" placeholder="Avg. Area Number of Bedrooms" required="required" /> <br>
+        
+
+          <button id="inputbutton"  type="submit" id="log" class="btn btn-primary btn-block btn-large">Predicted price of the house</button>
+    </form>
+
+     <script>
+              function getBotResponse() {
+                var rawText1 = $("#textInput1").val();
+                var rawText2 = $("#textInput2").val();
+                var rawText3 = $("#textInput3").val();
+                var rawText4 = $("#textInput4").val();
+                var rawText5 = $("#textInput5").val();
+
+
+                $("#textInput1").val("");
+                $("#textInput2").val("");
+                $("#textInput3").val("");
+                $("#textInput4").val("");
+                $("#textInput5").val("");
+
+                $.get("/get", { msg1: rawText1, msg2: rawText2, msg3: rawText3, msg4: rawText4, msg5: rawText5 }).done(function(data) {
+                  console.log(data);
+                  var Html = '<p class="botText"><span>The predicted price is: ' + data + "</span></p>";
+                  $("#box").append(Html);
+                  document
+                    .getElementById("userInput")
+                    .scrollIntoView({ block: "start", behavior: "smooth" });
+                });
+              }
+              $("#inputbutton").click(function(e) {
+                  getBotResponse();
+              });
+            </script>
+    </div>
+</body>
+</html>
